@@ -1,75 +1,94 @@
-# NT533 – Distributed Computing  
-## Final Project: Cloud-Native Distributed System on Amazon EKS
+# NT533 – Distributed Computing
 
 This GitHub organization is used to **manage all laboratories and the final project**
 for the course **NT533 – Distributed Computing**.
 
-It contains the complete source code, infrastructure definitions, configuration
-automation, and documentation related to the design and deployment of a
-cloud-native distributed system.
+It contains the complete source code, infrastructure definitions, automation scripts,
+and technical documentation related to the design and deployment of a
+**cloud-native distributed system**.
 
 ---
 
-## Final Project Overview
+## Final Project
 
-This final project presents the **design and implementation of a highly available
-distributed computing system** for microservices-based applications deployed on
-**Amazon Elastic Kubernetes Service (EKS)**.
+### Cloud-Native Highly Available Amazon EKS System for Microservices Applications
 
-The primary objective of the project is to build a **fault-tolerant, scalable, and
-resilient distributed architecture** capable of maintaining stable service
-availability under varying workload conditions and infrastructure failures.
+This is the **final project** of the NT533 – Distributed Computing course.
 
-Within the project scope, a Kubernetes cluster is deployed on Amazon EKS following
-a **Multi–Availability Zone (Multi-AZ)** model. The system integrates container
-orchestration, load balancing, and application lifecycle management mechanisms to
-ensure that application components continue to operate even in the presence of
-node-level or Availability Zone failures.
+The project focuses on the **design and implementation of a highly available
+distributed system on Amazon Elastic Kubernetes Service (EKS)** for
+microservices-based applications.
 
-This project emphasizes real-world distributed system principles, including
-high availability, horizontal scalability, and infrastructure resilience.
+The main objectives of the final project include:
+
+- Designing a fault-tolerant distributed architecture
+- Deploying Kubernetes clusters in a Multi–Availability Zone (Multi-AZ) configuration
+- Ensuring service continuity under node-level and Availability Zone failures
+- Applying real-world cloud-native and distributed system principles
+- Demonstrating scalability, resilience, and operational stability
+
+The final system reflects production-oriented design patterns commonly used
+in modern cloud-native platforms.
 
 ---
 
-## 1. Architecture Overview
+### 1. Overview
 
-The system architecture is designed following **cloud-native and distributed
-computing best practices**, with a clear separation between infrastructure
-provisioning and system configuration.
+This organization consolidates all practical work and the final project developed
+throughout the NT533 course, with a focus on **distributed computing principles**,
+**cloud-native system design**, and **high-availability architectures**.
 
-Infrastructure resources are provisioned using **Terraform** with a
-**module-based architecture**, while higher-level configuration and operational
-tasks are handled by dedicated automation tooling.
+The primary technical scope of the work includes:
 
-Detailed infrastructure implementation can be found in the Terraform Hub repository:
+- Infrastructure provisioning using Infrastructure as Code (IaC)
+- Kubernetes-based distributed systems
+- Multi–Availability Zone (Multi-AZ) deployments on AWS
+- Fault tolerance, scalability, and resilience for microservices architectures
+- Clear separation between infrastructure, platform, and application layers
 
-👉 **Terraform Hub**  
-https://github.com/NT533-Q12-Distributed-Computing/terraform-hub
+---
 
-Terraform modules are organized to manage:
+### 2. Cloud Architecture
+
+The system architecture follows **cloud-native and distributed computing best practices**,
+with a clear separation between **infrastructure provisioning** and
+**configuration / operational workflows**.
+
+#### 2.1 Infrastructure Provisioning with Terraform
+
+The infrastructure layer is provisioned using **Terraform** with a
+**module-based architecture**.
+
+Each Terraform module is responsible for a specific layer of the infrastructure,
+including:
 
 - Networking and routing
 - Security and IAM
 - Compute resources for Kubernetes platforms
-- Supporting cloud-native infrastructure components
+- Supporting cloud-native components
 
-Terraform outputs are intentionally structured to enable seamless integration with
-external automation tools and operational workflows.
+Terraform outputs are intentionally structured to be consumed by
+external automation tools, enabling seamless integration with
+configuration management and operational workflows.
+
+For detailed infrastructure implementation, refer to:  
+👉 **[terraform-hub](https://github.com/NT533-Q12-Distributed-Computing/terraform-hub)**
 
 ---
 
-## 1.1 Staging Environment
+### 2.2 Staging Environment
 
-The **staging environment** serves as a controlled platform for provisioning and
-validating a Kubernetes-ready infrastructure before applying similar architectural
-patterns to production environments.
+The **staging environment** serves as a controlled platform for
+provisioning and validating a Kubernetes-ready infrastructure
+before applying similar architectural patterns to production
+environments.
 
-![Staging Environment Architecture](images/staging-env.png)
+![Staging Environment Architecture](../images/staging-env.png)
 
-### Staging Environment Characteristics
+#### Staging Environment Characteristics
 
 - Deployment across multiple Availability Zones
-- A dedicated VPC with isolated public and private subnets
+- A dedicated VPC with isolated private and public subnets
 - Private subnets for Kubernetes nodes and internal services
 - Public subnets reserved for controlled management access
 - Dedicated infrastructure for observability components
@@ -82,22 +101,23 @@ and Kubernetes compatibility prior to production deployment.
 
 ---
 
-## 1.2 Production Environment
+#### 2.3 Production Environment
 
-The **production environment** represents a highly available, secure, and
-cloud-native Kubernetes platform deployed on
+The **production environment** represents a highly available,
+secure, and cloud-native Kubernetes platform deployed on
 **Amazon Elastic Kubernetes Service (EKS)**.
 
-This environment is designed to closely reflect real-world enterprise Kubernetes
-deployments on AWS, with an emphasis on scalability, resilience, and operational
-best practices.
+This environment is designed to closely reflect real-world
+enterprise Kubernetes deployments on AWS, with an emphasis on
+scalability, resilience, and operational best practices.
 
-![Production Environment Architecture](images/prod-env.png)
+![Production Environment Architecture](../images/prod-env.png)
 
 ### Production Environment Overview
 
-The production architecture is deployed within a dedicated **AWS VPC** and spans
-**multiple Availability Zones (AZs)** to ensure high availability and fault tolerance.
+The production architecture is deployed within a dedicated
+**AWS VPC** and spans **multiple Availability Zones (AZs)** to
+ensure high availability and fault tolerance.
 
 At a high level, the production environment consists of:
 
@@ -109,65 +129,16 @@ At a high level, the production environment consists of:
 - Public access to applications via an Application Load Balancer (ALB)
 - Controlled outbound internet access via a NAT Gateway
 
-This design follows AWS and Kubernetes best practices by isolating application
-workloads in private subnets while exposing only well-defined entry points to the
-public internet.
-
----
-
-### Production Architecture Characteristics
-
-#### Multi-AZ and High Availability Design
-
-- The VPC is segmented across multiple Availability Zones
-- Each Availability Zone contains one or more private subnets
-- EKS worker nodes are distributed across all AZs
-- Kubernetes scheduling mechanisms provide resilience against
-  node-level and AZ-level failures
-
----
-
-#### Amazon EKS Platform
-
-- The Kubernetes control plane is fully managed by Amazon EKS
-- Worker nodes operate exclusively in private subnets
-- Node groups are designed for scalability and fault tolerance
-- Kubernetes-native mechanisms handle pod scheduling and recovery
-
----
-
-#### Application Traffic Flow
-
-- External client traffic is routed through an
-  **Application Load Balancer (ALB)**
-- The ALB forwards traffic to Kubernetes services within the cluster
-- Only explicitly defined services are exposed publicly
-- Internal cluster communication remains private and isolated
-
----
-
-#### Observability Infrastructure
-
-- Observability components are provisioned as dedicated infrastructure
-- Core capabilities include:
-  - Metrics collection
-  - Log aggregation
-  - Distributed tracing
-- This separation improves system stability and reduces the blast radius
-  of monitoring components during failure scenarios
-
----
-
-#### Secure Network Access
-
-- Management access is provided through a controlled VPN entry point
-- No direct administrative access is exposed to the public internet
-- Infrastructure access follows the principle of least privilege
+This design follows AWS and Kubernetes best practices by isolating
+application workloads in private subnets while exposing only
+well-defined entry points to the public internet.
 
 ---
 
 ## Author
 
-This project is developed as part of the **NT533 – Distributed Computing** course,
-with a focus on **cloud-native system design**, **distributed computing principles**,
-and **high-availability Kubernetes architectures**.
+Developed as part of the **NT533 – Distributed Computing** course, with a focus on:
+
+- Cloud-native system design  
+- Distributed computing principles  
+- High-availability Kubernetes architectures  
